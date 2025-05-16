@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Membres</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@heroicons/v2.0.18/24/outline/index.js"></script>
+    <style>
+        .striped-table tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .hover-scale {
+            transition: transform 0.2s ease-in-out;
+        }
+        .hover-scale:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+<!-- Navigation -->
+<nav class="bg-white shadow-sm">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 justify-between">
+            <div class="flex items-center">
+                <a href="#" th:href="@{/members}" class="flex items-center text-slate-800">
+                    <svg class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                    </svg>
+                    <span class="ml-2 text-xl font-bold">MemberManager</span>
+                </a>
+                <div class="hidden md:ml-6 md:flex md:space-x-8">
+                    <a th:href="@{/members}" class="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900">
+                        Liste des Membres
+                    </a>
+                    <a th:href="@{/members/new}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:border-b-2 hover:border-indigo-300 hover:text-gray-700">
+                        Nouveau Membre
+                    </a>
+                </div>
+            </div>
+            <div class="flex items-center">
+
+                <form th:action="@{/members/find}" method="get" class="flex max-w-md items-center">
+                    <input type="text"
+                           name="phoneNumber"
+                           th:value="${phoneNumber}"
+                           placeholder="Search by phone..."
+                           class="mr-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+
+                    <button type="submit" class="inline-flex items-center rounded-md bg-indigo-600 p-2 text-white hover:bg-indigo-700">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                </form>            </div>
+        </div>
+    </div>
+</nav>
+<!-- Pagination -->
+<div class="mt-6 flex items-center justify-between px-4 py-3 bg-gray-50 border-t border-gray-200 sm:px-6">
+    <div class="flex-1 flex justify-between sm:hidden">
+        <a th:href="@{/members(page=${page.number - 1}, size=${page.size})}"
+           class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+           th:classappend="${page.first} ? 'invisible'">Précédent</a>
+        <a th:href="@{/members(page=${page.number + 1}, size=${page.size})}"
+           class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+           th:classappend="${page.last} ? 'invisible'">Suivant</a>
+    </div>
+
+    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div>
+            <p class="text-sm text-gray-700">
+                Affichage de
+                <span class="font-medium" th:text="${page.number * page.size + 1}"></span> à
+                <span class="font-medium" th:text="${(page.number + 1) * page.size > page.totalElements ? page.totalElements : (page.number + 1) * page.size}"></span> sur
+                <span class="font-medium" th:text="${page.totalElements}"></span> résultats
+            </p>
+        </div>
+
+        <div>
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <!-- First Page -->
+                <a th:href="@{/members(page=0, size=${page.size})}"
+                   class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                   th:classappend="${page.first} ? 'cursor-not-allowed bg-gray-100'">
+                    <span class="sr-only">Premier</span>
+                    <hero-icon-outline name="chevron-double-left" class="h-5 w-5"></hero-icon-outline>
+                </a>
+
+                <!-- Previous Page -->
+                <a th:href="@{/members(page=${page.number - 1}, size=${page.size})}"
+                   class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                   th:classappend="${page.first} ? 'cursor-not-allowed bg-gray-100'">
+                    <span class="sr-only">Précédent</span>
+                    <hero-icon-outline name="chevron-left" class="h-5 w-5"></hero-icon-outline>
+                </a>
+
+                <!-- Page Numbers -->
+                <a th:each="pageNum : ${#numbers.sequence(1, page.totalPages)}"
+                   th:href="@{/members(page=${pageNum - 1}, size=${page.size})}"
+                   class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium"
+                   th:classappend="${(pageNum == page.number + 1) ?
+                   'z-10 bg-indigo-50 border-indigo-500 text-indigo-600' :
+                   'text-gray-700 hover:bg-gray-50'}">
+                    <span th:text="${pageNum}"></span>
+                </a>
+
+                <!-- Next Page -->
+                <a th:href="@{/members(page=${page.number + 1}, size=${page.size})}"
+                   class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                   th:classappend="${page.last} ? 'cursor-not-allowed bg-gray-100'">
+                    <span class="sr-only">Suivant</span>
+                    <hero-icon-outline name="chevron-right" class="h-5 w-5"></hero-icon-outline>
+                </a>
+
+                <!-- Last Page -->
+                <a th:href="@{/members(page=${page.totalPages - 1}, size=${page.size})}"
+                   class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                   th:classappend="${page.last} ? 'cursor-not-allowed bg-gray-100'">
+                    <span class="sr-only">Dernier</span>
+                    <hero-icon-outline name="chevron-double-right" class="h-5 w-5"></hero-icon-outline>
+                </a>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Main Content -->
+<main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+    <div class="rounded-xl bg-white shadow-sm ring-1 ring-gray-900/5">
+        <table class="w-full striped-table">
+            <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prénom</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléphone</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Détails</th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+            <tr th:each="membre, iterStat : ${members}" class="hover-scale hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" th:text="${iterStat.index + 1}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${membre.firstName}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${membre.lastName}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${membre.phoneNumber}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <a th:href="@{'/members/view/' + ${membre.id}}" class="text-slate-600 hover:text-slate-900">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div class="flex justify-end space-x-2">
+
+                        <a th:href="@{'/members/delete/' + ${membre.id}}" onclick="return confirm('Voulez-vous vraiment supprimer ce membre ?');" class="text-red-600 hover:text-red-900">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

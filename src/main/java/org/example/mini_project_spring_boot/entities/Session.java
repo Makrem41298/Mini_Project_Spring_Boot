@@ -32,5 +32,6 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name = "subscription_plan_id")
+
     private SubscriptionPlan subscriptionPlan;
 }

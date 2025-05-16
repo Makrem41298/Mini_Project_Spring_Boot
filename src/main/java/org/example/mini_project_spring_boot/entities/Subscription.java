@@ -17,7 +17,7 @@ public class Subscription {
     @ManyToOne
     @MapsId("memberId")
     @JoinColumn(name = "member_id")
-    private Membre membre;
+    private Member member;
 
     @ManyToOne
     @MapsId("subscriptionPlanId")

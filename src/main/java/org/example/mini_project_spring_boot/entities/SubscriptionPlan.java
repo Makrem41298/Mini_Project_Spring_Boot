@@ -34,7 +34,8 @@ public class SubscriptionPlan {
     @OneToMany(mappedBy = "subscriptionPlan", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Subscription> subscriptions = new ArrayList<>();
-
     @OneToMany(mappedBy = "subscriptionPlan", cascade = CascadeType.ALL)
+    @JsonIgnore
+
     private List<Session> sessions = new ArrayList<>();
 }

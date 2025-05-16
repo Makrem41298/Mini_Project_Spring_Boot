@@ -15,7 +15,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Membre {
+@ToString
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -33,7 +34,8 @@ public class Membre {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "membre")
+    @OneToMany(mappedBy = "member")
     @JsonIgnore
+    @ToString.Exclude
     private List<Subscription> subscriptions = new ArrayList<>();
 }

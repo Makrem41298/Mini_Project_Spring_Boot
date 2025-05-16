@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html xmlns:th="http://www.thymeleaf.org">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Nouveau Membre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@heroicons/v2.0.18/24/outline/index.js"></script>
+</head>
+<body class="bg-slate-50">
+<!-- Navigation (same as previous page) -->
+
+<!-- Main Content -->
+<main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+    <div class="rounded-xl bg-white shadow-sm ring-1 ring-gray-900/5 p-8">
+        <div class="mb-6 border-b border-gray-200 pb-4">
+            <h2 class="text-2xl font-semibold text-gray-900">
+                <a href="#" th:href="@{/members}" class="text-indigo-600 hover:text-indigo-900 mr-2">
+                    <svg class="h-6 w-6 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </a>
+                Update Membre
+            </h2>
+        </div>
+
+        <form th:action="@{/members/update/{id}(id=${membre.id})}"
+              th:object="${membre}"
+              method="post"
+              enctype="multipart/form-data"
+              class="space-y-6">            <!-- First Name -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Prénom</label>
+                <input type="text" th:field="*{firstName}"
+                       th:value="${membre.firstName}"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                       required>
+                <small class="text-red-500 text-sm" th:if="${#fields.hasErrors('firstName')}"
+                       th:errors="*{firstName}"></small>
+            </div>
+
+            <!-- Last Name -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Nom</label>
+                <input type="text" th:field="*{lastName}"
+                       th:value="${membre.lastName}"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                       required>
+                <small class="text-red-500 text-sm" th:if="${#fields.hasErrors('lastName')}"
+                       th:errors="*{lastName}"></small>
+            </div>
+
+            <!-- Phone Number -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Téléphone</label>
+                <input type="tel" th:field="*{phoneNumber}"
+                       th:value="${membre.phoneNumber}"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                       required>
+                <small class="text-red-500 text-sm" th:if="${#fields.hasErrors('phoneNumber')}"
+                       th:errors="*{phoneNumber}"></small>
+            </div>
+
+            <!-- Image Upload -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Photo du membre</label>
+                <div class="mt-1 flex items-center">
+                    <input type="file" name="image"
+                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                           accept="image/*">
+                </div>
+                <small class="text-gray-500 text-sm">Formats acceptés: JPG, PNG, JPEG (max 5MB)</small>
+                <small class="text-red-500 text-sm block" th:if="${#fields.hasErrors('imagePath')}"
+                       th:errors="*{imagePath}"></small>
+            </div>
+            <!-- Submit Button -->
+            <div class="pt-6">
+                <button type="submit"
+                        class="inline-flex items-center rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2">
+                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z" />
+                    </svg>
+                    Modifier le Membre
+                </button>
+
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

@@ -11,6 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
+@ToString
 public class SubscriptionId implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

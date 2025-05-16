@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Membre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@heroicons/v2.0.18/24/outline/index.js"></script>
+</head>
+<body class="bg-slate-50">
+<!-- Navigation (same as previous page) -->
+<nav class="bg-white shadow-sm">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 justify-between">
+            <div class="flex items-center">
+                <a href="#" th:href="@{/members}" class="flex items-center text-slate-800">
+                    <svg class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                    </svg>
+                    <span class="ml-2 text-xl font-bold">MemberManager</span>
+                </a>
+                <div class="hidden md:ml-6 md:flex md:space-x-8">
+                    <a th:href="@{/members}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:border-b-2 hover:border-indigo-300 hover:text-gray-700">
+                        Liste des Membres
+                    </a>
+                    <a th:href="@{/members/new}" class="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900">
+                        Nouveau Membre
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</nav>
+
+<!-- Main Content -->
+<main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+    <div class="rounded-xl bg-white shadow-sm ring-1 ring-gray-900/5 p-8">
+        <div class="mb-6 border-b border-gray-200 pb-4">
+            <h2 class="text-2xl font-semibold text-gray-900">
+                <a href="#" th:href="@{/members}" class="text-indigo-600 hover:text-indigo-900 mr-2">
+                    <svg class="h-6 w-6 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </a>
+                Ajouter un Nouveau Membre
+            </h2>
+        </div>
+
+        <form th:action="@{/members/save}" th:object="${membre}" method="post" enctype="multipart/form-data" class="space-y-6">
+            <!-- First Name -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Prénom</label>
+                <input type="text" th:field="*{firstName}"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                       required>
+                <small class="text-red-500 text-sm" th:if="${#fields.hasErrors('firstName')}"
+                       th:errors="*{firstName}"></small>
+            </div>
+
+            <!-- Last Name -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Nom</label>
+                <input type="text" th:field="*{lastName}"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                       required>
+                <small class="text-red-500 text-sm" th:if="${#fields.hasErrors('lastName')}"
+                       th:errors="*{lastName}"></small>
+            </div>
+
+            <!-- Phone Number -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Téléphone</label>
+                <input type="tel" th:field="*{phoneNumber}"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                       required>
+                <small class="text-red-500 text-sm" th:if="${#fields.hasErrors('phoneNumber')}"
+                       th:errors="*{phoneNumber}"></small>
+            </div>
+
+            <!-- Image Upload -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Photo du membre</label>
+                <div class="mt-1 flex items-center">
+                    <input type="file" name="image"
+                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                           accept="image/*">
+                </div>
+                <small class="text-gray-500 text-sm">Formats acceptés: JPG, PNG, JPEG (max 5MB)</small>
+                <small class="text-red-500 text-sm block" th:if="${#fields.hasErrors('imagePath')}"
+                       th:errors="*{imagePath}"></small>
+            </div>
+            <!-- Submit Button -->
+            <div class="pt-6">
+                <button type="submit"
+                        class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Ajouter le Membre
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>
