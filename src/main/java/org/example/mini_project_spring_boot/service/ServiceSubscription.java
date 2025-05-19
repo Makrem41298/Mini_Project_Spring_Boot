@@ -7,8 +7,8 @@ import org.example.mini_project_spring_boot.entities.SubscriptionId;
 import org.example.mini_project_spring_boot.repository.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 
-@Service  // Pour que Spring détecte ce service
-@AllArgsConstructor // Pour générer un constructeur avec le champ final
+@Service
+@AllArgsConstructor
 public class ServiceSubscription implements IServiceSubscription {
 
     private final SubscriptionRepository subscriptionRepository;
